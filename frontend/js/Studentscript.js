@@ -14,9 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       // Validate current step before proceeding
       if (formStepNum === 0) {
-        console.log("Validating Step 1...");
         const isValid = validateStep1();
-        console.log("Step 1 validation result:", isValid);
         
         if (isValid) {
           formStepNum++;
@@ -130,61 +128,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const startTimeInput = document.getElementById("startTime");
-    const endTimeInput = document.getElementById("endTime");
-    const preferredTimingsInput = document.getElementById("preferredTimings");
-    const timeError = document.getElementById("timeError");
+  // Time validation
+  const startTimeInput = document.getElementById("startTime");
+  const endTimeInput = document.getElementById("endTime");
+  const timeError = document.getElementById("timeError");
 
-    const minTime = "09:00";
-    const maxTime = "17:00";
+  const minTime = "09:00";
+  const maxTime = "17:00";
 
-    function validateTimeRange() {
-      const start = startTimeInput.value;
-      const end = endTimeInput.value;
+  function validateTimeRange() {
+    const start = startTimeInput.value;
+    const end = endTimeInput.value;
 
-      // Reset visual indicators
-      startTimeInput.style.borderColor = "";
-      endTimeInput.style.borderColor = "";
-      timeError.style.display = "none";
+    // Reset visual indicators
+    startTimeInput.style.borderColor = "";
+    endTimeInput.style.borderColor = "";
+    timeError.style.display = "none";
 
-      if (!start || !end) return false;
+    if (!start || !end) return false;
 
-      if (start < minTime || end > maxTime || end <= start) {
-        timeError.style.display = "block";
-        startTimeInput.style.borderColor = "red";
-        endTimeInput.style.borderColor = "red";
-        preferredTimingsInput.value = "";
-        return false;
-      } else {
-        // Valid range, update hidden field
-        preferredTimingsInput.value = `${start} - ${end}`;
-        return true;
-      }
+    if (start < minTime || end > maxTime || end <= start) {
+      timeError.style.display = "block";
+      startTimeInput.style.borderColor = "red";
+      endTimeInput.style.borderColor = "red";
+      return false;
     }
 
-    // Real-time validation
-    startTimeInput.addEventListener("input", validateTimeRange);
-    endTimeInput.addEventListener("input", validateTimeRange);
+    return true;
+  }
 
-    // Ensure timing validation before form submission
-    const form = document.getElementById("educatorForm");
-    if (form) {
-      form.addEventListener("submit", (e) => {
-        const valid = validateTimeRange();
-        if (!valid) {
-          e.preventDefault();
-          alert("Please select valid start and end times between 09:00 and 17:00.");
-        }
-      });
-    }
-  });
+  // Real-time validation
+  startTimeInput.addEventListener("input", validateTimeRange);
+  endTimeInput.addEventListener("input", validateTimeRange);
 
 
 
   // === Form Validation Functions ===
   function validateEmail(email) {
-    console.log('Validating email:', email);
     
     // More comprehensive email validation
     // Supports most common email formats including international domains
@@ -192,60 +172,48 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Additional checks
     if (!email || email.length === 0) {
-      console.log('Email validation failed: empty email');
       return false;
     }
     if (email.length > 254) {
-      console.log('Email validation failed: too long');
       return false;
     } // RFC 5321 limit
     
     // Check for basic structure
     const parts = email.split('@');
     if (parts.length !== 2) {
-      console.log('Email validation failed: invalid @ structure');
       return false;
     }
     
     const [localPart, domainPart] = parts;
-    console.log('Local part:', localPart, 'Domain part:', domainPart);
     
     // Local part validation
     if (localPart.length === 0 || localPart.length > 64) {
-      console.log('Email validation failed: invalid local part length');
       return false;
     } // RFC 5321 limit
     if (localPart.startsWith('.') || localPart.endsWith('.')) {
-      console.log('Email validation failed: local part starts/ends with dot');
       return false;
     }
     if (localPart.includes('..')) {
-      console.log('Email validation failed: consecutive dots in local part');
       return false;
     } // No consecutive dots
     
     // Domain part validation
     if (domainPart.length === 0 || domainPart.length > 253) {
-      console.log('Email validation failed: invalid domain part length');
       return false;
     }
     if (domainPart.startsWith('.') || domainPart.endsWith('.')) {
-      console.log('Email validation failed: domain starts/ends with dot');
       return false;
     }
     if (domainPart.includes('..')) {
-      console.log('Email validation failed: consecutive dots in domain');
       return false;
     } // No consecutive dots
     
     // Must have at least one dot in domain
     if (!domainPart.includes('.')) {
-      console.log('Email validation failed: no dot in domain');
       return false;
     }
     
     const regexResult = emailRegex.test(email);
-    console.log('Regex test result:', regexResult);
     return regexResult;
   }
 
@@ -295,24 +263,20 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Get all required fields in step 1
     const step1Fields = document.querySelectorAll('#step1 input[required], #step1 select[required]');
-    console.log("Found", step1Fields.length, "required fields in step 1");
     
     step1Fields.forEach((field, index) => {
       // Skip validation for hidden conditional fields
       const fieldContainer = field.closest('.form-group');
       const isHidden = fieldContainer && fieldContainer.style.display === 'none';
       
-      console.log(`Field ${index}:`, field.name, "Value:", field.value, "Hidden:", isHidden);
       
       if (isHidden) {
-        console.log(`Skipping hidden field: ${field.name}`);
         return; // Skip this field
       }
       
       const value = field.value.trim();
       
       if (!value) {
-        console.log(`Empty field found: ${field.name}`);
         showFieldError(field, 'This field is required');
         isValid = false;
       } else {
@@ -324,49 +288,46 @@ document.addEventListener("DOMContentLoaded", () => {
     const yearField = document.getElementById('yearField');
     const yearInput = document.getElementById('yearInput');
     if (yearField && yearField.style.display !== 'none' && yearField.style.display !== '') {
-      console.log("Year field is visible, checking value:", yearInput.value);
       if (!yearInput.value.trim()) {
         showFieldError(yearInput, 'Year is required for undergraduate/postgraduate');
         isValid = false;
       } else {
         clearFieldError(yearInput);
       }
-    } else {
-      console.log("Year field is hidden, skipping validation");
     }
-    
     // Special validation for other curriculum field if visible
     const otherCurriculumField = document.getElementById('otherCurriculumField');
     const otherCurriculumInput = document.getElementById('otherCurriculumInput');
     if (otherCurriculumField && otherCurriculumField.style.display !== 'none' && otherCurriculumField.style.display !== '') {
-      console.log("Other curriculum field is visible, checking value:", otherCurriculumInput.value);
       if (!otherCurriculumInput.value.trim()) {
         showFieldError(otherCurriculumInput, 'Please specify the curriculum');
         isValid = false;
       } else {
         clearFieldError(otherCurriculumInput);
       }
-    } else {
-      console.log("Other curriculum field is hidden, skipping validation");
     }
     
-    console.log("Step 1 validation complete. Is valid:", isValid);
     return isValid;
   }
 
   function validateStep2() {
     let isValid = true;
     const step2Fields = document.querySelectorAll('#step2 input[required]');
-    
+
     step2Fields.forEach(field => {
+      // Skip time fields as they have custom validation
+      if (field.id === 'startTime' || field.id === 'endTime') {
+        return;
+      }
+
       const value = field.value.trim();
-      
+
       if (!value) {
         showFieldError(field, 'This field is required');
         isValid = false;
       } else {
         clearFieldError(field);
-        
+
         // Email validation
         if (field.name === 'email') {
           if (!validateEmail(value)) {
@@ -374,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
             isValid = false;
           }
         }
-        
+
         // Mobile number validation
         if (field.name === 'contact') {
           if (!validateMobileNumber(value)) {
@@ -384,13 +345,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
-    
+
+    // Validate time range
+    if (!validateTimeRange()) {
+      isValid = false;
+    }
+
     // Validate preferred days selection
     const dayCheckboxes = document.querySelectorAll('.days-grid input[type="checkbox"]');
     const selectedDays = Array.from(dayCheckboxes).filter(cb => cb.checked);
     const daysInput = document.getElementById('daysInput');
     const expectedDays = parseInt(daysInput.value);
-    
+
     if (selectedDays.length !== expectedDays) {
       const dayWarning = document.getElementById('dayWarning');
       dayWarning.textContent = `Please select exactly ${expectedDays} day(s) as specified`;
@@ -400,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const dayWarning = document.getElementById('dayWarning');
       dayWarning.textContent = '';
     }
-    
+
     return isValid;
   }
 
@@ -408,11 +374,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add real-time validation for email field
   document.querySelector('input[name="email"]').addEventListener('blur', function() {
     const value = this.value.trim();
-    console.log('Email validation - Input:', value);
     
     if (value) {
       const isValid = validateEmail(value);
-      console.log('Email validation result:', isValid);
       
       if (!isValid) {
         showFieldError(this, 'Please enter a valid email address');
@@ -459,42 +423,57 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         // Collect form data
         const formData = new FormData(document.getElementById("educatorForm"));
-        console.log(formData);
     
         // Add preferred days
         const selectedDays = Array.from(document.querySelectorAll('.days-grid input[type="checkbox"]:checked'))
           .map(cb => cb.value);
 
         // Convert FormData to JSON object
-        // Before sending
         const jsonData = {};
         for (let [key, value] of formData.entries()) {
+          // Skip year from FormData, we'll handle it separately
+          if (key === 'year') {
+            continue;
+          }
+          // Skip time fields as we'll format them into preferredTimings
+          if (key === 'startTime' || key === 'endTime') {
+            continue;
+          }
           jsonData[key] = value.trim();
         }
 
         // Convert to proper types
         jsonData.daysPerWeek = parseInt(jsonData.daysPerWeek);
-        
 
-        // Ensure curriculum lowercase
+        // Ensure curriculum is properly formatted
         if (jsonData.curriculum) {
           jsonData.curriculum = jsonData.curriculum.trim();
         }
 
-        // Add preferredDa
+        // Add preferred days
         jsonData.preferredDays = Array.from(
           document.querySelectorAll('.days-grid input[type="checkbox"]:checked')
         ).map(cb => cb.value);
 
-        // Rename timings key
-        if (jsonData.preferredTimings === undefined && jsonData.timings) {
-          jsonData.preferredTimings = jsonData.timings;
-          delete jsonData.timings;
+        // Get year value properly - ONLY if field is visible and has a value
+        const yearField = document.getElementById("yearField");
+        const yearInput = document.getElementById("yearInput");
+        const grade = document.getElementById("gradeSelect").value;
+
+        // Only add year if grade is Undergraduate or Postgraduate AND has a value
+        if ((grade === 'Undergraduate' || grade === 'Postgraduate') &&
+            yearInput.value && yearInput.value.trim() !== '') {
+          jsonData.year = yearInput.value.trim();
         }
-        const yearData=document.getElementById("yearInput").value;
-        console.log(yearData);
-        jsonData.year=yearData;
-        jsonData.preferredTimings= 9;
+
+        // Format preferredTimings from start and end time
+        const startTime = document.getElementById("startTime").value;
+        const endTime = document.getElementById("endTime").value;
+        if (startTime && endTime) {
+          jsonData.preferredTimings = `${startTime} - ${endTime}`;
+        }
+        const yearInput = document.getElementById('yearInput').value;
+        jsonData.year = yearInput;
 
         // Send data to backend API
         const response = await fetch('http://localhost:5000/api/students/register', {

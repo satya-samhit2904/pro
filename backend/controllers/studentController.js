@@ -30,7 +30,7 @@ const registerStudent = async (req, res) => {
       contact,
       email
     } = req.body;
-   
+
     // Check if student already exists
     const existingStudent = await Student.findOne({
       $or: [{ email }, { contact }]
@@ -44,7 +44,7 @@ const registerStudent = async (req, res) => {
     }
 
     // Create new student
-    const student = new Student({
+    const studentData = {
       studentName,
       grade,
       year,
@@ -58,11 +58,13 @@ const registerStudent = async (req, res) => {
       preferredTimings,
       contact,
       email
-    });
+    };
+
+
+    const student = new Student(studentData);
 
     // Save to database
     await student.save();
-    console.log("student",student);
     // Return success response
     res.status(201).json({
       success: true,
@@ -74,7 +76,8 @@ const registerStudent = async (req, res) => {
         email: student.email,
         grade: student.grade,
         registrationDate: student.registrationDate,
-        year: student.year
+        year: student.year,
+        preferredTimings: student.preferredTimings
       }
     });
 

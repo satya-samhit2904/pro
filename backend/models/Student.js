@@ -129,8 +129,11 @@ studentSchema.index({ status: 1 });
 
 // Pre-save middleware to handle conditional validation
 studentSchema.pre('save', function(next) {
-  // Remove year if not undergraduate/postgraduate
-  if (this.grade !== 'undergraduate' && this.grade !== 'postgraduate') {
+
+  // Remove year if not undergraduate/postgraduate (case-insensitive check)
+  const gradeLower = this.grade ? this.grade.toLowerCase() : '';
+
+  if (gradeLower !== 'undergraduate' && gradeLower !== 'postgraduate') {
     this.year = undefined;
   }
 
