@@ -5,7 +5,8 @@ const {
   getAllTutors,
   getTutorById,
   updateTutorStatus,
-  searchTutorsBySubject
+  searchTutorsBySubject,
+  exportTutorsToExcel
 } = require('../controllers/tutorController');
 const { validateTutorRegistration } = require('../middleware/validators');
 
@@ -15,6 +16,7 @@ router.get('/search', searchTutorsBySubject);
 
 // Admin routes (add authentication middleware in production)
 router.get('/', getAllTutors);
+router.get('/export/excel', exportTutorsToExcel);
 router.get('/:id', getTutorById);
 router.patch('/:id/status', updateTutorStatus);
 

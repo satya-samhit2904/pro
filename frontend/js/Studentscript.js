@@ -457,7 +457,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Get year value properly - ONLY if field is visible and has a value
         const yearField = document.getElementById("yearField");
-        const yearInput = document.getElementById("yearInput");
         const grade = document.getElementById("gradeSelect").value;
 
         // Only add year if grade is Undergraduate or Postgraduate AND has a value
