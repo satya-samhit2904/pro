@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Educator Onboarding Form</title>
+  <link rel="stylesheet" href="css/tutorstyle.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container topbar__wrap">
+      <a href="#" class="brand">
+        <span class="brand__dot"></span> Tutor Portal
+      </a>
+    </div>
+  </header>
+
+  <main class="section container">
+    <div class="form-card">
+      <h2>Tutor Onboarding Form</h2>
+
+
+      <form id="teacherForm">
+        <!-- Step 1 -->
+        <div class="form-step active" id="step1">
+          <div class="form-group">
+            <label>Name:</label>
+            <input type="text" name="name" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group">
+            <label>Age:</label>
+            <input type="number" name="age" placeholder="Enter your age" required>
+          </div>
+          <div class="form-group">
+            <label>Education Qualification:</label>
+            <input type="text" name="educationQualification" placeholder="e.g., B.Ed, M.Sc" required>
+          </div>
+          <div class="form-group">
+            <label>Years of Experience in Teaching:</label>
+            <input type="number" name="yearsOfTeachingExperience" placeholder="e.g., 5" required>
+          </div>
+          <div class="form-group">
+            <label>Working in School?:</label>
+            <select name="workingInSchool" required>
+              <option value="">Select</option>
+              <option value="Y">Yes</option>
+              <option value="N">No</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn--primary" id="next1">Next</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="form-step" id="step2">
+          <div class="form-group">
+            <label>Experience in Online Classes:</label>
+            <input type="text" name="onlineClassesExperience" placeholder="e.g., 2 years" required>
+          </div>
+          <div class="form-group">
+            <label>Subjects:</label>
+            <input type="text" name="subjects" placeholder="e.g., Math, Science" required>
+          </div>
+          <div class="form-group">
+            <label>Expected Fees According to the Class:</label>
+            <input type="text" name="expectedFees" placeholder="e.g., ₹500/hr" required>
+          </div>
+          <div class="form-group">
+            <label>Location:</label>
+            <input type="text" name="location" placeholder="City, State" required>
+          </div>
+          <div class="form-group">
+            <label>Devices Used for Classes:</label>
+            <input type="text" name="devicesUsed" placeholder="e.g., Laptop, Tablet" required>
+          </div>
+          <div class="form-group">
+            <label>Contact Number:</label>
+            <input type="tel" name="contact" placeholder="+91 9876543210" required>
+          </div>
+          <div class="form-group">
+            <label>Email ID:</label>
+            <input type="email" name="email" placeholder="name@example.com" required>
+          </div>
+
+          <div class="form-actions between">
+            <button type="button" class="btn btn--outline" id="back1">Back</button>
+            <button type="submit" class="btn btn--primary">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="js/tutorscript.js"></script>
+</body>
+</html>

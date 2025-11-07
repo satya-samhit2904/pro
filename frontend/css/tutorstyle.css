@@ -1,0 +1,202 @@
+/* Import brand palette and shared variables */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---------------------------------
+   Root Variables (Color Palette)
+----------------------------------- */
+:root {
+  --bg: #0b1220;
+  --surface: #0b1220;
+  --border: #1f2a44;
+  --muted: #64748b;
+  --white: #ffffff;
+  --primary: #5b86ff;
+  --primary-strong: #3c6bff;
+  --ring: rgba(91, 134, 255, 0.35);
+}
+
+/* ---------------------------------
+   Global Reset & Base Styles
+----------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: #e5e7eb;
+  line-height: 1.6;
+}
+
+/* ---------------------------------
+   Layout Helpers
+----------------------------------- */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section {
+  padding: 60px 0;
+}
+
+/* ---------------------------------
+   Topbar
+----------------------------------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: saturate(140%) blur(8px);
+  background: rgba(11, 18, 32, 0.85);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar__wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #8ab4ff, #3c6bff);
+  box-shadow: 0 0 18px #3c6bff;
+}
+/* ---------------------------------
+   Form Card
+----------------------------------- */
+.form-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 0 25px rgba(60, 107, 255, 0.08);
+}
+
+.form-card h2 {
+  text-align: center;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  background-color: #1f2a44;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 8px;
+  margin-bottom: 25px;
+}
+
+.progress {
+  height: 8px;
+  width: 50%;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
+}
+
+/* Form Controls */
+.form-group {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #cbd5e1;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0c1427;
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn--primary {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.btn--primary:hover {
+  background: var(--primary-strong);
+  transform: translateY(-2px);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--border);
+}
+
+.btn--outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Layout Utilities */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-actions.between {
+  justify-content: space-between;
+}
+
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .btn {
+    width: 100%;
+  }
+}
