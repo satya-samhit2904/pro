@@ -62,14 +62,16 @@ app.get('/', (req, res) => {
         register: 'POST /api/students/register',
         getAll: 'GET /api/students',
         getById: 'GET /api/students/:id',
-        updateStatus: 'PATCH /api/students/:id/status'
+        updateStatus: 'PATCH /api/students/:id/status',
+        exportExcel: 'GET /api/students/export/excel?format=xlsx (or csv)'
       },
       tutors: {
         register: 'POST /api/tutors/register',
         getAll: 'GET /api/tutors',
         getById: 'GET /api/tutors/:id',
         updateStatus: 'PATCH /api/tutors/:id/status',
-        search: 'GET /api/tutors/search?subject=...'
+        search: 'GET /api/tutors/search?subject=...',
+        exportExcel: 'GET /api/tutors/export/excel?format=xlsx (or csv)'
       }
     }
   });

@@ -1,5 +1,6 @@
 const Student = require('../models/Student');
 const { validationResult } = require('express-validator');
+const ExcelJS = require('exceljs');
 
 // Register a new student
 const registerStudent = async (req, res) => {
@@ -211,9 +212,128 @@ const updateStudentStatus = async (req, res) => {
   }
 };
 
+// Export students data to Excel/CSV
+const exportStudentsToExcel = async (req, res) => {
+  try {
+    const { status, grade, format = 'xlsx' } = req.query;
+
+    // Build query
+    const query = {};
+    if (status) query.status = status;
+    if (grade) query.grade = grade;
+
+    // Fetch all students matching the criteria
+    const students = await Student.find(query)
+      .sort({ createdAt: -1 })
+      .select('-__v');
+
+    if (students.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No students found to export'
+      });
+    }
+
+    // Create a new workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Students');
+
+    // Define columns
+    worksheet.columns = [
+      { header: 'ID', key: '_id', width: 25 },
+      { header: 'Student Name', key: 'studentName', width: 25 },
+      { header: 'Email', key: 'email', width: 30 },
+      { header: 'Contact', key: 'contact', width: 15 },
+      { header: 'Grade', key: 'grade', width: 15 },
+      { header: 'Year', key: 'year', width: 15 },
+      { header: 'School Name', key: 'schoolName', width: 30 },
+      { header: 'Location', key: 'location', width: 25 },
+      { header: 'Curriculum', key: 'curriculum', width: 15 },
+      { header: 'Other Curriculum', key: 'otherCurriculum', width: 20 },
+      { header: 'Subjects', key: 'subjects', width: 40 },
+      { header: 'Days Per Week', key: 'daysPerWeek', width: 15 },
+      { header: 'Preferred Days', key: 'preferredDays', width: 30 },
+      { header: 'Preferred Timings', key: 'preferredTimings', width: 25 },
+      { header: 'Status', key: 'status', width: 15 },
+      { header: 'Registration Date', key: 'registrationDate', width: 20 },
+      { header: 'Created At', key: 'createdAt', width: 20 },
+      { header: 'Updated At', key: 'updatedAt', width: 20 }
+    ];
+
+    // Style the header row
+    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FF4472C4' }
+    };
+    worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+
+    // Add rows
+    students.forEach(student => {
+      worksheet.addRow({
+        _id: student._id.toString(),
+        studentName: student.studentName,
+        email: student.email,
+        contact: student.contact,
+        grade: student.grade,
+        year: student.year || 'N/A',
+        schoolName: student.schoolName,
+        location: student.location,
+        curriculum: student.curriculum,
+        otherCurriculum: student.otherCurriculum || 'N/A',
+        subjects: student.subjects,
+        daysPerWeek: student.daysPerWeek,
+        preferredDays: Array.isArray(student.preferredDays) ? student.preferredDays.join(', ') : student.preferredDays,
+        preferredTimings: student.preferredTimings,
+        status: student.status,
+        registrationDate: student.registrationDate ? new Date(student.registrationDate).toLocaleDateString() : 'N/A',
+        createdAt: student.createdAt ? new Date(student.createdAt).toLocaleString() : 'N/A',
+        updatedAt: student.updatedAt ? new Date(student.updatedAt).toLocaleString() : 'N/A'
+      });
+    });
+
+    // Apply borders to all cells
+    worksheet.eachRow((row, rowNumber) => {
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
+      });
+    });
+
+    // Set response headers
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `students_export_${timestamp}`;
+
+    if (format === 'csv') {
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}.csv"`);
+      await workbook.csv.write(res);
+    } else {
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
+      await workbook.xlsx.write(res);
+    }
+
+    res.end();
+
+  } catch (error) {
+    console.error('Error exporting students:', error);
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while exporting students data'
+    });
+  }
+};
+
 module.exports = {
   registerStudent,
   getAllStudents,
   getStudentById,
-  updateStudentStatus
+  updateStudentStatus,
+  exportStudentsToExcel
 };
